@@ -1,0 +1,52 @@
+import csv
+
+import pandas as pd
+import sklearn as sk
+import tensorflow as tf
+import numpy as np
+import pathlib
+import matplotlib.pyplot as plt
+import seaborn as sns
+from tensorflow import keras
+from tensorflow.keras import layers
+
+
+dataset_path = pd.read_csv('D:\Documentos\Groceries_dataset.csv')
+
+column_name = ['itemDescription']
+column_numbers = ['Member_number', 'Date']
+
+print(dataset_path)
+
+dataset_path.head()
+dataset_path.tail()
+dataset_path.describe()
+dataset_path.info()
+
+x_train = dataset_path[column_name]
+y_train = dataset_path[column_numbers]
+
+x_train.shape
+y_train.shape
+
+model = tf.keras.Sequential()
+model.add(tf.keras.layers.Dense(units=1, input_shape=[1]))
+model.summary()
+model.compile(optimizer=tf.keras.optimizers.Adam(0.1), loss='mean_square_error')
+
+epochs_hist = model.fit(x_train, y_train, epochs=100, validation_split=0.2)
+epochs_hist.history.keys()
+
+plt.plot(epochs_hist['loss'], color='blue')
+plt.title('Model loss Progress during training')
+plt.xlabel('Epochs')
+plt.ylabel('Training loss')
+plt.legend('Training loss')
+plt.show()
+
+plt.plot(epochs_hist.history['loss'], color='blue', label='Training loss')
+plt.plot(epochs_hist.history['val_loss'], color='red', label='Validation loss')
+
+plt.title('Model loss progress during training the model')
+plt.xlabel('Epochs')
+plt.ylabel('Training loss / Validation Loss')
